@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, RequestTimeoutException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
-import { orthographyCheckUseCase } from './use-cases';
-import { OrthographyDto, ProsConsDiscusserDto } from './dtos';
-import { prosConsDicusserUseCase } from './use-cases/pros-cons-dicusser.use-case';
-import { prosConsDicusserStreamUseCase } from './use-cases/pros-cons-stream.use-case';
+import { orthographyCheckUseCase, prosConsDicusserUseCase, textToAudioUseCase, translateUseCase } from './use-cases';
+import { OrthographyDto, ProsConsDiscusserDto, TextToAudioDto, TranslateDto } from './dtos';
+import { prosConsDicusserStreamUseCase } from './use-cases/pros-cons-stream.use-case copy';
+import type { Response } from 'express';
+import * as path from "path";
+import * as fs from "fs";
+import { deepStrictEqual } from 'assert';
 
 
 @Injectable()
@@ -35,7 +38,27 @@ export class GptService {
     return await prosConsDicusserUseCase(this.openai, { prompt });
   }
 
-   async prosConsDicusserStream({ prompt }: ProsConsDiscusserDto) {
+  async prosConsDicusserStream({ prompt }: ProsConsDiscusserDto) {
     return await prosConsDicusserStreamUseCase(this.openai, { prompt });
+  }
+
+  async translateText({ prompt, lang }: TranslateDto) {
+    return await translateUseCase(this.openai, { prompt, lang });
+  }
+
+  async textToAudio({ prompt, voice }: TextToAudioDto) {
+    return await textToAudioUseCase(this.openai, { prompt, voice });
+  }
+
+  async textToAudioGetter(fileId: string) {
+    const filderPath = path.resolve(__dirname, '../../generated/audios/'
+      , `${fileId}.mp3`
+    );
+
+    const wasFound = fs.existsSync(filderPath);
+
+    if (!wasFound) new NotFoundException(`File ${fileId} not found`);
+
+    return filderPath;
   }
 }

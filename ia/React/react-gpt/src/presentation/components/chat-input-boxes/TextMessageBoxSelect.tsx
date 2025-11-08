@@ -2,7 +2,7 @@ import React, { useState, type FormEvent } from 'react'
 
 
 interface Props {
-  onSendMessage: (message: string,selectedOption:string) => void;
+  onSendMessage: (message: string, selectedOption: string) => void;
   placeholder?: string;
   disableCorrections?: boolean;
   options: Option[];
@@ -25,6 +25,8 @@ export const TextMessageBoxSelect = ({ onSendMessage, placeholder, disableCorrec
     event.preventDefault();
 
     if (message.trim().length === 0) return;
+
+    if (selectedOption === '') return;
 
     onSendMessage(message, selectedOption);
     setMessage('');
@@ -57,7 +59,7 @@ export const TextMessageBoxSelect = ({ onSendMessage, placeholder, disableCorrec
           <select name='select'
             className='w-2/5 ml-5 border rounded-xl text-gray-800 focus:outline-none focus:border-indigo-300 pl-4 h-10'
             value={selectedOption}
-            onChange={e=>setSelectedOption(e.target.value)}
+            onChange={e => setSelectedOption(e.target.value)}
           >
             <option value='' >'Seleccione'</option>
             {
