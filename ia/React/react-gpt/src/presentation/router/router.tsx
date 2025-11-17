@@ -42,6 +42,13 @@ export const menuRoutes = [
     component: <TextToAudioPage />
   },
   {
+    to: "/audio-to-text",
+    icon: "fa-solid fa-comment-dots",
+    title: "Audio a texto",
+    description: "Convertir audio a texto",
+    component: <AudioToTextPage />
+  },
+  {
     to: "/image-generation",
     icon: "fa-solid fa-image",
     title: "Imágenes",
@@ -56,13 +63,6 @@ export const menuRoutes = [
     component: <ImageTunningPage />
   },
   {
-    to: "/audio-to-text",
-    icon: "fa-solid fa-comment-dots",
-    title: "Audio a texto",
-    description: "Convertir audio a texto",
-    component: <AudioToTextPage />
-  },
-  {
     to: "/assistant",
     icon: "fa-solid fa-user",
     title: "Asistente",
@@ -72,19 +72,19 @@ export const menuRoutes = [
 ];
 
 export const router = createBrowserRouter([
-    {
-        path:"/",
-        element: <DashboardLayout />,
-        children: [
-          ...menuRoutes.map(route =>({
-            path: route.to,
-            element: route.component
-          })),
-          {
-            path:'',
-            element:<Navigate to={ menuRoutes[0].to }></Navigate>
-          }
-        ],
+  {
+    path: "/",
+    element: <DashboardLayout />,
+    children: [
+      ...menuRoutes.map(route => ({
+        path: route.to,
+        element: route.component
+      })),
+      {
+        path: '',
+        element: <Navigate to={menuRoutes[0].to}></Navigate>
+      }
+    ],
 
-    }
+  }
 ])

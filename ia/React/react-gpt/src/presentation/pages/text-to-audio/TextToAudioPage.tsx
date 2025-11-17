@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { GptMessage, GptMessageAudio, MyMessage, TextMessageBox, TextMessageBoxSelect, TypingLoader } from '../../components'
-import type { StringDecoder } from 'string_decoder';
+// import type { StringDecoder } from 'string_decoder';
 import { textToAudioUseCase } from '../../../core/use-cases';
 
 const displaimer = `## ¿Que audio quieres generar hoy ?

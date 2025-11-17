@@ -1,14 +1,17 @@
 import { Injectable, NotFoundException, RequestTimeoutException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import OpenAI from 'openai';
-import { audiotToTextUseCase, orthographyCheckUseCase, prosConsDicusserUseCase, textToAudioUseCase, translateUseCase } from './use-cases';
+import { audiotToTextUseCase, imageGenerationUseCase, orthographyCheckUseCase, prosConsDicusserUseCase, textToAudioUseCase, translateUseCase, imageVariationUseCase } from './use-cases';
 import { OrthographyDto, ProsConsDiscusserDto, TextToAudioDto, TranslateDto } from './dtos';
 import { prosConsDicusserStreamUseCase } from './use-cases/pros-cons-stream.use-case copy';
 import type { Response } from 'express';
 import * as path from "path";
 import * as fs from "fs";
 import { deepStrictEqual } from 'assert';
-import { AudioToTextDto } from './dtos/audio-to-text-dto';
+import { AudioToTextDto } from './dtos/audio-to-text.dto';
+import { ImageGenerationDto } from './dtos/image-generation.dto';
+import { makeFile } from 'node_modules/openai/internal/uploads';
+import { ImageVariationDto } from './dtos/image-variation.dto';
 
 
 @Injectable()
@@ -64,7 +67,28 @@ export class GptService {
   }
 
   async audioToText(audioFile: Express.Multer.File, audioToTextDto: AudioToTextDto) {
-    const {prompt} =audioToTextDto;
+    const { prompt } = audioToTextDto;
     return await audiotToTextUseCase(this.openai, { audioFile, prompt });
+  }
+
+  async imageGeneration(imageGenerationDto: ImageGenerationDto) {
+
+    return await imageGenerationUseCase(this.openai, imageGenerationDto);
+  }
+
+  getGeneratedImage(fileName: string) {
+
+    const filePath = path.resolve('./', './generated/images/', fileName)
+    const exists = fs.existsSync(filePath);
+    if (!exists) {
+      throw new NotFoundException('Fiole not found');
+    }
+    console.log(filePath);
+
+    return filePath;
+  }
+
+  async generateImageVariation({ baseImage }: ImageVariationDto) {
+    return imageVariationUseCase(this.openai, { baseImage });
   }
 }

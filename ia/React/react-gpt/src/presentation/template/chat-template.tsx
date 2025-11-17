@@ -10,7 +10,7 @@ interface Message {
 export const OrthographyPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
-  const [message, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const handlePost = async (text: string) => {
     setIsLoading(true);
@@ -33,7 +33,7 @@ export const OrthographyPage = () => {
           <GptMessage text="Hola david yo te ayudo"></GptMessage>
 
           {
-            message.map((message, index) => (
+            messages.map((message, index) => (
               message.isGpt
                 ? (
                   <GptMessage key={index} text='Esto es de OpenAi'></GptMessage>
