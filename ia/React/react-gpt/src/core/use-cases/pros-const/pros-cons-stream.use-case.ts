@@ -1,9 +1,9 @@
 
-import type { ProsConsResponse } from '../../interfaces';
+import type { ProsConsResponse } from '../../../interfaces';
 
 
 
-export async function* prosConsStreamGeneratorUseCase(prompt: string, abortSignal: AbortSignal) {
+export const prosConsStreamUseCase = async (prompt: string) => {
 
   try {
 
@@ -14,7 +14,6 @@ export async function* prosConsStreamGeneratorUseCase(prompt: string, abortSigna
       },
       body: JSON.stringify({ prompt }),
       //TODO: abortSignal
-      signal: abortSignal,
     });
 
     if (!resp.ok) throw new Error('No se pudo realizar la comparación');
@@ -25,24 +24,23 @@ export async function* prosConsStreamGeneratorUseCase(prompt: string, abortSigna
       return null;
     }
 
+    return reader;
 
+    // const decoder = new TextDecoder();
 
-    const decoder = new TextDecoder();
+    // let text = '';
 
-    let text = '';
+    // while (true) {
+    //   const { value, done } = await reader.read();
+    //   if (done) {
+    //     break;
+    //   }
 
-    while (true) {
-      const { value, done } = await reader.read();
-      if (done) {
-        break;
-      }
+    //   const decodedChunk = decoder.decode(value, { stream: true });
+    //   text+= decodedChunk;
+    //   console.log(text);
 
-      const decodedChunk = decoder.decode(value, { stream: true });
-      text += decodedChunk;
-      // console.log(text);
-      yield text;
-
-    }
+    // }
 
 
 

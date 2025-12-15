@@ -30,13 +30,13 @@ export const OrthographyPage = () => {
         <div className='grid grid-cols-12 gap-y-2'>
 
           {/* Bienvenida*/}
-          <GptMessage text="Hola david yo te ayudo"></GptMessage>
+          <GptMessage text="Buenos dias soy cecilia en que puedo ayudarte?"></GptMessage>
 
           {
             messages.map((message, index) => (
               message.isGpt
                 ? (
-                  <GptMessage key={index} text='Esto es de OpenAi'></GptMessage>
+                  <GptMessage key={index} text={message.text}></GptMessage>
                 )
                 : (
                   <MyMessage key={index} text={message.text}></MyMessage>
