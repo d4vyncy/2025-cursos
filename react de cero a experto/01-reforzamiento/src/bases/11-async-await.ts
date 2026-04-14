@@ -13,7 +13,7 @@ const createImageInsideDOM = (url: string) => {
     document.body.append(imgElement);
 }
 
-const getRandomGifUrl = async () => {
+const getRandomGifUrl = async ():Promise<string> => {
     const response = await fetch(
         `https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}`
     );
